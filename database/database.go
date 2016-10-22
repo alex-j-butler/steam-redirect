@@ -3,17 +3,23 @@ package database
 import (
 	"github.com/codegangsta/martini"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+
+	// MySQL dialect for GORM
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var DB *gorm.DB
 
-func Database() martini.Handler {
-	DB, err := gorm.Open("sqlite", "test.sqlite")
+func Database(config DatabaseConfig, values ...interface{}) martini.Handler {
+	// Connect to gorm using the DatabaseConfig.
+	DB, err := gorm.Open(config.getDialect(), config.getConnectString())
 
 	if err != nil {
 		panic(err)
 	}
+
+	// Auto migrate the structs provided.
+	DB.AutoMigrate(values...)
 
 	return func(c martini.Context) {
 		database := DB
