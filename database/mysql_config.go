@@ -1,6 +1,11 @@
 package database
 
-import "fmt"
+import (
+	"fmt"
+
+	// MySQL dialect for GORM
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+)
 
 type MySQLConfig struct {
 	Address   string

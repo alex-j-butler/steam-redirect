@@ -7,42 +7,39 @@ import (
 	"alex-j-butler.com/steam-redirect/database"
 	"alex-j-butler.com/steam-redirect/models"
 
-	"github.com/codegangsta/martini"
-	"github.com/codegangsta/martini-contrib/render"
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
 
+var DB *gorm.DB
+
 func main() {
-	m := martini.Classic()
-	m.Use(database.Database(database.MySQLConfig{
+	m := mux.NewRouter()
+
+	DB = database.Dial(database.MySQLConfig{
 		Username:  "root",
 		Password:  "",
 		Database:  "steam_redirect",
 		Charset:   "utf8",
 		ParseTime: true,
-	}, &models.Server{}))
-	m.Use(render.Renderer())
-	defer database.Close()
+	}, &models.Server{})
+	defer DB.Close()
 
-	m.Get("/server", ListServers)
-	m.Get("/server/:name", HandleServer)
+	m.HandleFunc("/server/{name}", ServerHandle).
+		Methods("GET")
 
-	m.Run()
+	http.ListenAndServe(":3000", m)
 }
 
-func ListServers(r render.Render, db *gorm.DB) {
-	var servers []models.Server
+func ServerHandle(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["name"]
 
-	if err := db.Find(&servers); err.Error == nil {
-		r.HTML(200, "list", servers)
-	}
-}
-
-func HandleServer(w http.ResponseWriter, res *http.Request, params martini.Params, db *gorm.DB) {
 	var server models.Server
-
-	if err := db.Where(&models.Server{Name: params["name"]}).First(&server); err.Error == nil {
+	if err := DB.Where(&models.Server{Name: name}).First(&server); err.Error == nil {
 		url := fmt.Sprintf("steam://connect/%s:%d/%s", server.IP, server.Port, server.Password)
-		http.Redirect(w, res, url, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+	} else {
+		w.Write([]byte("Server does not exist."))
 	}
 }

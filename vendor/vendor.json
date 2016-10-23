@@ -7,28 +7,22 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "1Hm7Ij3YHAqBbxLCcGr4NKbI6e0=",
-			"path": "github.com/codegangsta/inject",
-			"revision": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504",
-			"revisionTime": "2015-01-14T23:56:00Z"
-		},
-		{
-			"checksumSHA1": "P252gIImNS/OQcBzCV8dM0hFWLo=",
-			"path": "github.com/codegangsta/martini",
-			"revision": "fe605b5cd210047ae3bb73d2b69a5b912a9b423d",
-			"revisionTime": "2016-09-08T07:09:01Z"
-		},
-		{
-			"checksumSHA1": "fe0T7VI7Gro2MZ9p5t3nxKkFF2k=",
-			"path": "github.com/codegangsta/martini-contrib/render",
-			"revision": "8ce6181c2609699e4c7cd30994b76a850a9cdadc",
-			"revisionTime": "2014-02-08T23:45:50Z"
-		},
-		{
 			"checksumSHA1": "ORf6FCVRalwuMqFsiYqvCMW1X/o=",
 			"path": "github.com/go-sql-driver/mysql",
 			"revision": "dbc3fe23a4aced10a53834106e288b155d17e2ee",
 			"revisionTime": "2016-10-20T10:29:09Z"
+		},
+		{
+			"checksumSHA1": "IkPM2QLv9urri7S49wzroQx9oXA=",
+			"path": "github.com/gorilla/context",
+			"revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+			"revisionTime": "2016-08-17T18:46:32Z"
+		},
+		{
+			"checksumSHA1": "QQe2WybsKsiDEsBzIElxUjQV3qg=",
+			"path": "github.com/gorilla/mux",
+			"revision": "757bef944d0f21880861c2dd9c871ca543023cba",
+			"revisionTime": "2016-09-20T23:08:13Z"
 		},
 		{
 			"checksumSHA1": "wvfruoQYSBoQRO5ZldlJvRoTojk=",
