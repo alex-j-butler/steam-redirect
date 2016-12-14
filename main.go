@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"alex-j-butler.com/steam-redirect/config"
 	"alex-j-butler.com/steam-redirect/database"
 	"alex-j-butler.com/steam-redirect/models"
 
@@ -14,13 +15,15 @@ import (
 var DB *gorm.DB
 
 func main() {
+	config.InitialiseConfiguration()
+
 	m := mux.NewRouter()
 
 	DB = database.Dial(database.MySQLConfig{
-		Username:  "root",
-		Password:  "",
-		Database:  "steam_redirect",
-		Charset:   "utf8",
+		Username:  config.Conf.Database.Username,
+		Password:  config.Conf.Database.Password,
+		Database:  config.Conf.Database.Database,
+		Charset:   config.Conf.Database.Charset,
 		ParseTime: true,
 	}, &models.Server{})
 	defer DB.Close()
@@ -28,7 +31,9 @@ func main() {
 	m.HandleFunc("/server/{name}", ServerHandle).
 		Methods("GET")
 
-	http.ListenAndServe(":3000", m)
+	m.NotFoundHandler = http.HandlerFunc(NotFoundHandle)
+
+	http.ListenAndServe(fmt.Sprintf("%s:%d", config.Conf.Address, config.Conf.Port), m)
 }
 
 func ServerHandle(w http.ResponseWriter, r *http.Request) {
@@ -42,4 +47,8 @@ func ServerHandle(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Write([]byte("Server does not exist."))
 	}
+}
+
+func NotFoundHandle(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Server does not exist."))
 }
